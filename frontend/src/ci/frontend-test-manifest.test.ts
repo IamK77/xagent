@@ -451,8 +451,8 @@ function assertSemanticWorkflowManifest(source: string) {
   if (!Array.isArray(frontendBuild.steps)) {
     throw new Error("jobs.frontend-build.steps must be an array")
   }
-  if (frontendBuild["runs-on"] !== "ubuntu-latest") {
-    throw new Error("jobs.frontend-build.runs-on must be ubuntu-latest")
+  if (frontendBuild["runs-on"] !== "ubuntu-24.04") {
+    throw new Error("jobs.frontend-build.runs-on must be ubuntu-24.04")
   }
 
   assertBashCompatibleDefaultShell(workflow, "workflow root")
@@ -663,13 +663,13 @@ describe("frontend CI test manifest", () => {
   it("requires the frontend build runner contract", () => {
     const source = replaceExactlyOnce(
       realWorkflowSource,
-      "  frontend-build:\n    runs-on: ubuntu-latest\n",
+      "  frontend-build:\n    runs-on: ubuntu-24.04\n",
       "  frontend-build:\n    runs-on: windows-latest\n",
       "frontend-build runner",
     )
 
     expect(() => assertSemanticWorkflowManifest(source)).toThrow(
-      "jobs.frontend-build.runs-on must be ubuntu-latest",
+      "jobs.frontend-build.runs-on must be ubuntu-24.04",
     )
   })
 
