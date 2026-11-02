@@ -30,7 +30,7 @@ jobs:
   # ci-summary and docs/branch-protection.md "Gate at the step, not at the job".
   changes:
     name: Detect Changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # The merge queue allows 60 minutes for a check to respond. A hung API call
     # must not eat that budget.
     timeout-minutes: 5
@@ -116,7 +116,7 @@ jobs:
 
   prepare-deepdoc-cache:
     name: Prepare Deepdoc Cache
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     outputs:
       cache-hit: ${{ steps.deepdoc-cache.outputs.cache-hit }}
@@ -245,7 +245,7 @@ jobs:
           retention-days: 1
 
   pre-commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
 
@@ -327,7 +327,7 @@ jobs:
 
   pytest-fast:
     name: Pytest Fast (${{ matrix.name }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # The web leg's test step alone takes about 35 minutes on a healthy run,
     # and slow runners pushed it past a 40-minute limit near the end. Hung
     # tests are cut by pytest-timeout (300 s per test), not by this limit.
@@ -453,7 +453,7 @@ jobs:
 
   pytest-fast-deepdoc:
     name: Pytest Fast Deepdoc (${{ matrix.name }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: [changes, prepare-deepdoc-cache, pre-commit]
@@ -624,7 +624,7 @@ jobs:
           python3 -m uv run python -m pytest ${{ matrix.paths }} -m "not slow and not postgresql" -n 4 --dist=loadscope -v
 
   pytest-slow:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: [changes, prepare-deepdoc-cache, pre-commit]
@@ -764,7 +764,7 @@ jobs:
 
   pytest-milvus:
     name: Pytest Milvus
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: [changes, pre-commit]
@@ -837,7 +837,7 @@ jobs:
 
   e2e:
     name: e2e (${{ matrix.shard }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: [changes, pre-commit]
     timeout-minutes: 45
@@ -946,7 +946,7 @@ jobs:
           python3 -m uv run python -m pytest ${{ matrix.paths }} --run-special -v --durations=20
 
   frontend-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: changes
 
@@ -1084,7 +1084,7 @@ jobs:
 
   lancedb-memory-compatibility:
     name: LanceDB Memory Compatibility (${{ matrix.lancedb }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     strategy:
@@ -1113,7 +1113,7 @@ jobs:
 
   ci-summary:
     name: CI Summary
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
       - changes
